@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
-set -e  # Arrête en cas d'erreur
+set -e  # Arrêter en cas d'erreur
 
 ### 🌍 Configuration du réseau ###
 timedatectl set-ntp true
@@ -27,13 +27,13 @@ mount ${DISK}1 /mnt/boot
 swapon ${DISK}2
 
 ### 📦 Installation du système de base ###
-pacstrap /mnt base linux linux-firmware vim grub efibootmgr networkmanager
+pacstrap /mnt base linux linux-firmware vim grub efibootmgr networkmanager zsh
 
 ### 📋 Génération du fstab ###
 genfstab -U /mnt >> /mnt/etc/fstab
 
 ### 🛠 Configuration du système ###
-arch-chroot /mnt bash <<EOF
+arch-chroot /mnt zsh <<EOF
 ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 
@@ -55,6 +55,9 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # 🚀 Activer le réseau au démarrage
 systemctl enable NetworkManager
+
+# 🐚 Définir Zsh comme shell par défaut
+chsh -s /bin/zsh root
 EOF
 
 echo "Installation terminée ! Vous pouvez redémarrer."
