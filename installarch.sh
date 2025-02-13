@@ -27,7 +27,7 @@ mount ${DISK}1 /mnt/boot
 swapon ${DISK}2
 
 ### 📦 Installation du système de base ###
-pacstrap /mnt base linux linux-firmware vim grub efibootmgr networkmanager zsh
+pacstrap /mnt base linux linux-firmware vim grub efibootmgr networkmanager zsh sudo
 
 ### 📋 Génération du fstab ###
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -56,8 +56,17 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # 🚀 Activer le réseau au démarrage
 systemctl enable NetworkManager
 
-# 🐚 Définir Zsh comme shell par défaut
-chsh -s /bin/zsh root
+# 🧑‍💻 Ajouter un utilisateur
+USER_NAME="ton_utilisateur"
+
+useradd -m -G wheel -s /bin/zsh $USER_NAME
+echo "$USER_NAME:toor" | chpasswd
+
+# 🔓 Autoriser wheel à utiliser sudo
+echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 EOF
+
+# 🐚 Définir Zsh comme shell par défaut
+arch-chroot /mnt chsh -s /bin/zsh root
 
 echo "Installation terminée ! Vous pouvez redémarrer."
