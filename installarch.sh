@@ -57,10 +57,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager
 
 # 🧑‍💻 Ajouter un utilisateur
-USER_NAME="ton_utilisateur"
+USER_NAME="raph"
 
 useradd -m -G wheel -s /bin/zsh $USER_NAME
-echo "$USER_NAME:toor" | chpasswd
+echo "$USER_NAME:gogolebg" | chpasswd
 
 # 🔓 Autoriser wheel à utiliser sudo
 echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
